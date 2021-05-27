@@ -958,6 +958,7 @@ export type HlsConfig = {
     fpsController: typeof FPSController;
     progressive: boolean;
     lowLatencyMode: boolean;
+    splittingReloadTime?: number;
 } & ABRControllerConfig & BufferControllerConfig & CapLevelControllerConfig & EMEControllerConfig & FPSControllerConfig & FragmentLoaderConfig & LevelControllerConfig & MP4RemuxerConfig & PlaylistLoaderConfig & StreamControllerConfig & LatencyControllerConfig & TimelineControllerConfig & TSDemuxerConfig;
 
 // Warning: (ae-missing-release-tag) "HlsEventEmitter" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -1345,6 +1346,8 @@ export class LevelDetails {
     holdBack: number;
     // (undocumented)
     initSegment: Fragment | null;
+    // (undocumented)
+    isSplitting: boolean;
     // (undocumented)
     get lastPartIndex(): number;
     // (undocumented)

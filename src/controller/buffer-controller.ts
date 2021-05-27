@@ -616,7 +616,9 @@ export default class BufferController implements ComponentAPI {
     const msDuration = Number.isFinite(mediaSource.duration)
       ? mediaSource.duration
       : 0;
-
+    logger.log(
+      `[buffer-controller]: ${levelDuration} ${mediaDuration} ${msDuration}`
+    );
     if (details.live && hls.config.liveDurationInfinity) {
       // Override duration to Infinity
       logger.log(
@@ -638,6 +640,8 @@ export default class BufferController implements ComponentAPI {
         )}`
       );
       mediaSource.duration = levelDuration;
+    } else if (details.isSplitting) {
+      mediaSource.duration = levelDuration;
     }
   }
 
@@ -645,7 +649,11 @@ export default class BufferController implements ComponentAPI {
     const mediaSource = this.mediaSource;
     const fragments = levelDetails.fragments;
     const len = fragments.length;
-    if (len && levelDetails.live && mediaSource?.setLiveSeekableRange) {
+    if (
+      len &&
+      (levelDetails.live || levelDetails.isSplitting) &&
+      mediaSource?.setLiveSeekableRange
+    ) {
       const start = Math.max(0, fragments[0].start);
       const end = Math.max(start, start + levelDetails.totalduration);
       mediaSource.setLiveSeekableRange(start, end);

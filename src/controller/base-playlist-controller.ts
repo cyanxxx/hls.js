@@ -115,7 +115,13 @@ export default class BasePlaylistController implements NetworkComponentAPI {
     details.advancedDateTime = Date.now() - elapsed;
 
     // if current playlist is a live playlist, arm a timer to reload it
-    if (details.live || previousDetails?.live) {
+    if (
+      details.live ||
+      previousDetails?.live ||
+      details.isSplitting ||
+      previousDetails?.isSplitting
+    ) {
+      logger.log('reload');
       details.reloaded(previousDetails);
       if (previousDetails) {
         this.log(
@@ -130,7 +136,7 @@ export default class BasePlaylistController implements NetworkComponentAPI {
       if (previousDetails && details.fragments.length > 0) {
         LevelHelper.mergeDetails(previousDetails, details);
       }
-      if (!this.canLoad || !details.live) {
+      if (!this.canLoad || (!details.live && !details.isSplitting)) {
         return;
       }
       let deliveryDirectives: HlsUrlParameters;
@@ -205,7 +211,21 @@ export default class BasePlaylistController implements NetworkComponentAPI {
           part
         );
       }
-      let reloadInterval = computeReloadInterval(details, stats);
+      let computedReloadInterval = computeReloadInterval(details, stats);
+      let reloadInterval =
+        (details.isSplitting &&
+          this.hls.config.splittingReloadTime &&
+          Math.max(
+            this.hls.config.splittingReloadTime,
+            computedReloadInterval
+          )) ||
+        computedReloadInterval;
+      logger.log(
+        details.live,
+        details.isSplitting,
+        this.hls.config.splittingReloadTime,
+        reloadInterval
+      );
       if (msn !== undefined && details.canBlockReload) {
         reloadInterval -= details.partTarget || 1;
       }

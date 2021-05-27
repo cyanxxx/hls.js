@@ -423,13 +423,21 @@ export function computeReloadInterval(
     estimatedTimeUntilUpdate = reloadInterval - roundTrip;
   }
 
-  // console.log(`[computeReloadInterval] live reload ${newDetails.updated ? 'REFRESHED' : 'MISSED'}`,
-  //   '\n  method', estimate,
-  //   '\n  estimated time until update =>', estimatedTimeUntilUpdate,
-  //   '\n  average target duration', reloadInterval,
-  //   '\n  time since modified', timeSinceLastModified,
-  //   '\n  time round trip', roundTrip,
-  //   '\n  availability delay', availabilityDelay);
+  logger.log(
+    `[computeReloadInterval] live reload ${
+      newDetails.updated ? 'REFRESHED' : 'MISSED'
+    }`,
+    '\n  estimated time until update =>',
+    estimatedTimeUntilUpdate,
+    '\n  average target duration',
+    reloadInterval,
+    '\n  time since modified',
+    timeSinceLastModified,
+    '\n  time round trip',
+    roundTrip,
+    '\n  availability delay',
+    availabilityDelay
+  );
 
   return Math.round(estimatedTimeUntilUpdate);
 }
