@@ -168,6 +168,7 @@ export type HlsConfig = {
   fpsController: typeof FPSController;
   progressive: boolean;
   lowLatencyMode: boolean;
+  splittingReloadTime?: number;
 } & ABRControllerConfig &
   BufferControllerConfig &
   CapLevelControllerConfig &

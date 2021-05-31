@@ -238,7 +238,8 @@ export default class StreamController
     if (
       !levelDetails ||
       this.state === State.WAITING_LEVEL ||
-      (levelDetails.live && this.levelLastLoaded !== level)
+      (levelDetails.live && this.levelLastLoaded !== level) ||
+      (levelDetails.isSplitting && this.levelLastLoaded !== level)
     ) {
       this.state = State.WAITING_LEVEL;
       return;
@@ -597,6 +598,7 @@ export default class StreamController
     if (
       !level.details ||
       (level.details.live && this.levelLastLoaded !== data.level) ||
+      (level.details.isSplitting && this.levelLastLoaded !== data.level) ||
       this.waitForCdnTuneIn(level.details)
     ) {
       this.state = State.WAITING_LEVEL;
@@ -631,7 +633,12 @@ export default class StreamController
 
     const curLevel = levels[newLevelId];
     let sliding = 0;
-    if (newDetails.live || curLevel.details?.live) {
+    if (
+      newDetails.live ||
+      curLevel.details?.live ||
+      newDetails.isSplitting ||
+      curLevel.details?.isSplitting
+    ) {
       if (!newDetails.fragments[0]) {
         newDetails.deltaUpdateFailed = true;
       }

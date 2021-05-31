@@ -44,6 +44,7 @@ const LEVEL_PLAYLIST_REGEX_SLOW = new RegExp(
     /#EXT-X-(KEY):(.+)/.source,
     /#EXT-X-(START):(.+)/.source,
     /#EXT-X-(ENDLIST)/.source,
+    /#(SPLITTINGLIST)/.source,
     /#EXT-X-(DISCONTINUITY-SEQ)UENCE: *(\d+)/.source,
     /#EXT-X-(DIS)CONTINUITY/.source,
     /#EXT-X-(VERSION):(\d+)/.source,
@@ -319,7 +320,12 @@ export default class M3U8Parser {
           case 'EXTM3U':
             break;
           case 'ENDLIST':
+            logger.log('end it.');
             level.live = false;
+            break;
+          case 'SPLITTINGLIST':
+            logger.log('get SPLITTINGLIST.');
+            level.isSplitting = true;
             break;
           case '#':
             if (value1 || value2) {

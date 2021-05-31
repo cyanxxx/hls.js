@@ -279,6 +279,7 @@ class AudioStreamController
     if (
       !trackDetails ||
       (trackDetails.live && this.levelLastLoaded !== trackId) ||
+      (trackDetails.isSplitting && this.levelLastLoaded !== trackId) ||
       this.waitForCdnTuneIn(trackDetails)
     ) {
       this.state = State.WAITING_TRACK;

@@ -261,7 +261,7 @@ export default class LevelController extends BasePlaylistController {
     this.hls.trigger(Events.LEVEL_SWITCHING, levelSwitchingData);
     // check if we need to load playlist for this level
     const levelDetails = level.details;
-    if (!levelDetails || levelDetails.live) {
+    if (!levelDetails || levelDetails.live || levelDetails.isSplitting) {
       // level not retrieved yet, or live playlist we need to (re)load it
       const hlsUrlParameters = this.switchParams(level.uri, lastLevel?.details);
       this.loadPlaylist(hlsUrlParameters);

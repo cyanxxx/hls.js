@@ -47,6 +47,7 @@ export class LevelDetails {
   public driftEndTime: number = 0;
   public driftStart: number = 0;
   public driftEnd: number = 0;
+  public isSplitting: boolean = false;
 
   constructor(baseUrl) {
     this.fragments = [];

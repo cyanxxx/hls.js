@@ -196,7 +196,7 @@ class AudioTrackController extends BasePlaylistController {
       url,
     });
     // Do not reload track unless live
-    if (track.details && !track.details.live) {
+    if (track.details && (!track.details.live || !track.details.isSplitting)) {
       return;
     }
     const hlsUrlParameters = this.switchParams(track.url, lastTrack?.details);

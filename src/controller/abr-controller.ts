@@ -82,6 +82,7 @@ class AbrController implements ComponentAPI {
 
   protected onLevelLoaded(event: Events.LEVEL_LOADED, data: LevelLoadedData) {
     const config = this.hls.config;
+    //  TODO:修改level
     if (data.details.live) {
       this.bwEstimator.update(config.abrEwmaSlowLive, config.abrEwmaFastLive);
     } else {
