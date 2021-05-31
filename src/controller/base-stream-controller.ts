@@ -136,7 +136,7 @@ export default class BaseStreamController
     // rationale is that in case there are any buffered ranges after, it means that there are unbuffered portion in between
     // so we should not switch to ENDED in that case, to be able to buffer them
     if (
-      !levelDetails.live &&
+      (!levelDetails.live || !levelDetails.isSplitting) &&
       fragCurrent &&
       fragCurrent.sn === levelDetails.endSN &&
       !bufferInfo.nextStart
@@ -1072,7 +1072,7 @@ export default class BaseStreamController
     // Wait for Low-Latency CDN Tune-in to get an updated playlist
     const advancePartLimit = 3;
     return (
-      details.live &&
+      (details.live || details.isSplitting) &&
       details.canBlockReload &&
       details.tuneInGoal >
         Math.max(details.partHoldBack, details.partTarget * advancePartLimit)
